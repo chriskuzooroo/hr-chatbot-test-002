@@ -1,21 +1,21 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { Configuration, OpenAIApi } = require('openai'); // Ensure correct import
+const { Configuration, OpenAIApi } = require('openai'); // Correct imports for version 4.8.0
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Initialize OpenAI Configuration
+// OpenAI Configuration
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY, // Your OpenAI API Key
+  apiKey: process.env.OPENAI_API_KEY, // Load API key from environment variable
 });
 
-// Create OpenAI instance
+// Create an OpenAI API instance
 const openai = new OpenAIApi(configuration);
 
-// API Endpoint
+// API Endpoint for ChatGPT
 app.post('/api/chat', async (req, res) => {
   try {
     const { userMessage } = req.body;
@@ -25,23 +25,28 @@ app.post('/api/chat', async (req, res) => {
       messages: [
         {
           role: 'system',
-          content: `You are a helpful HR representative.`,
+          content: `You are a helpful HR representative. Answer all questions in a professional tone.`,
         },
-        { role: 'user', content: userMessage },
+        {
+          role: 'user',
+          content: userMessage,
+        },
       ],
     });
 
-    res.json({
-      assistantMessage: response.data.choices[0].message.content,
-    });
+    // Extract response content
+    const assistantMessage = response.data.choices[0].message.content;
+
+    // Send response to client
+    res.json({ assistantMessage });
   } catch (error) {
-    console.error(error);
-    res.status(500).send('Something went wrong with the AI request.');
+    console.error('Error communicating with OpenAI API:', error);
+    res.status(500).send('Failed to process the request.');
   }
 });
 
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
