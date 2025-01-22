@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
+    "postinstall": "npm install openai@4.8.0"
   },
   "dependencies": {
     "cors": "^2.8.5",
