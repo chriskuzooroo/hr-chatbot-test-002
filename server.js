@@ -1,21 +1,21 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { OpenAIApi, Configuration } = require('openai'); // Ensure this import is correct
+const { Configuration, OpenAIApi } = require('openai'); // Ensure correct import
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Create Configuration
+// Initialize OpenAI Configuration
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY, // Ensure your .env file is correctly set
+  apiKey: process.env.OPENAI_API_KEY, // Your OpenAI API Key
 });
 
 // Create OpenAI instance
 const openai = new OpenAIApi(configuration);
 
-// API endpoint
+// API Endpoint
 app.post('/api/chat', async (req, res) => {
   try {
     const { userMessage } = req.body;
@@ -25,7 +25,7 @@ app.post('/api/chat', async (req, res) => {
       messages: [
         {
           role: 'system',
-          content: `You are a friendly HR representative. Provide helpful and professional HR-related advice.`,
+          content: `You are a helpful HR representative.`,
         },
         { role: 'user', content: userMessage },
       ],
