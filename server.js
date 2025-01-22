@@ -2,18 +2,22 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { Configuration, OpenAIApi } = require('openai');
-const openaiPackage = require('openai'); // Import the whole package to access its version
-
-// Log the installed OpenAI version
-console.log(`OpenAI library version: ${openaiPackage.version}`); // Logs the version during startup
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Ensure OpenAI is installed and log version
+try {
+  const openaiPackage = require('openai/package.json');
+  console.log(`OpenAI library version: ${openaiPackage.version}`);
+} catch (error) {
+  console.error('Failed to determine OpenAI version:', error.message);
+}
+
 // Initialize OpenAI Configuration
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY, // Load your OpenAI API Key from environment variables
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 // Create OpenAI API instance
@@ -43,7 +47,12 @@ app.post('/api/chat', async (req, res) => {
 
 // Add a debug route to check OpenAI version
 app.get('/api/debug/version', (req, res) => {
-  res.json({ openaiVersion: openaiPackage.version });
+  try {
+    const openaiPackage = require('openai/package.json');
+    res.json({ openaiVersion: openaiPackage.version });
+  } catch (error) {
+    res.status(500).send('Failed to retrieve OpenAI version.');
+  }
 });
 
 // Start the server
