@@ -2,10 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { Configuration, OpenAIApi } = require('openai');
+const openaiPackage = require('openai'); // Import the whole package to access its version
 
 // Log the installed OpenAI version
-const { version } = require('openai/package.json');
-console.log(`OpenAI library version: ${version}`); // Logs the version during startup
+console.log(`OpenAI library version: ${openaiPackage.version}`); // Logs the version during startup
 
 const app = express();
 app.use(cors());
@@ -43,7 +43,7 @@ app.post('/api/chat', async (req, res) => {
 
 // Add a debug route to check OpenAI version
 app.get('/api/debug/version', (req, res) => {
-  res.json({ openaiVersion: version });
+  res.json({ openaiVersion: openaiPackage.version });
 });
 
 // Start the server
