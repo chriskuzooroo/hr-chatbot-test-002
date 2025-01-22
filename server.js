@@ -1,29 +1,29 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { Configuration, OpenAIApi } = require('openai');
+const { Configuration, OpenAIApi } = require('openai'); // Correctly import OpenAI
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Ensure OpenAI is installed and log version
+// Log the OpenAI library version
 try {
   const openaiPackage = require('openai/package.json');
   console.log(`OpenAI library version: ${openaiPackage.version}`);
 } catch (error) {
-  console.error('Failed to determine OpenAI version:', error.message);
+  console.error('Failed to log OpenAI version:', error.message);
 }
 
 // Initialize OpenAI Configuration
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY, // Load OpenAI API key from environment variables
 });
 
-// Create OpenAI API instance
+// Create an OpenAI API instance
 const openai = new OpenAIApi(configuration);
 
-// Define API route for chat
+// Define a chat endpoint
 app.post('/api/chat', async (req, res) => {
   try {
     const { userMessage } = req.body;
@@ -36,7 +36,7 @@ app.post('/api/chat', async (req, res) => {
       ],
     });
 
-    // Extract and send the response
+    // Extract the response message
     const assistantMessage = response.data.choices[0].message.content;
     res.json({ assistantMessage });
   } catch (error) {
@@ -45,7 +45,7 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-// Add a debug route to check OpenAI version
+// Define a debug endpoint to check OpenAI version
 app.get('/api/debug/version', (req, res) => {
   try {
     const openaiPackage = require('openai/package.json');
