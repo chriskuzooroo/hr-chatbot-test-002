@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { Configuration, OpenAIApi } = require('openai'); // Correct imports
+const { Configuration, OpenAIApi } = require('openai');
 
 const app = express();
 app.use(cors());
@@ -40,4 +40,9 @@ try {
 
   // Start the server
   const PORT = process.env.PORT || 3000;
-  app.listen(PORT,
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+} catch (error) {
+  console.error('Failed to initialize OpenAI Configuration:', error.message);
+}
