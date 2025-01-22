@@ -4,8 +4,9 @@
   "description": "A ChatGPT-powered HR assistant app",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
-  },
+  "start": "node server.js",
+  "postinstall": "npm install"
+},
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
