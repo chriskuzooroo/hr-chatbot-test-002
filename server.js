@@ -1,3 +1,6 @@
+const { version } = require('openai/package.json'); // Import the version directly from the package
+console.log(`OpenAI library version: ${version}`);
+
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
