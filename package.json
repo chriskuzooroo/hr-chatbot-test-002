@@ -4,7 +4,7 @@
   "description": "A ChatGPT-powered HR assistant app",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
     "postinstall": "npm install openai@4.8.0"
   },
   "dependencies": {
