@@ -1,24 +1,25 @@
-const { version } = require('openai/package.json'); // Import the version directly from the package
-console.log(`OpenAI library version: ${version}`);
-
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { Configuration, OpenAIApi } = require('openai'); // Correct imports for version 4.8.0
+const { Configuration, OpenAIApi } = require('openai');
+
+// Log the installed OpenAI version
+const { version } = require('openai/package.json');
+console.log(`OpenAI library version: ${version}`); // Logs the version during startup
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// OpenAI Configuration
+// Initialize OpenAI Configuration
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY, // Load API key from environment variable
+  apiKey: process.env.OPENAI_API_KEY, // Load your OpenAI API Key from environment variables
 });
 
-// Create an OpenAI API instance
+// Create OpenAI API instance
 const openai = new OpenAIApi(configuration);
 
-// API Endpoint for ChatGPT
+// Define API route for chat
 app.post('/api/chat', async (req, res) => {
   try {
     const { userMessage } = req.body;
@@ -26,26 +27,23 @@ app.post('/api/chat', async (req, res) => {
     const response = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
       messages: [
-        {
-          role: 'system',
-          content: `You are a helpful HR representative. Answer all questions in a professional tone.`,
-        },
-        {
-          role: 'user',
-          content: userMessage,
-        },
+        { role: 'system', content: 'You are a helpful HR assistant.' },
+        { role: 'user', content: userMessage },
       ],
     });
 
-    // Extract response content
+    // Extract and send the response
     const assistantMessage = response.data.choices[0].message.content;
-
-    // Send response to client
     res.json({ assistantMessage });
   } catch (error) {
-    console.error('Error communicating with OpenAI API:', error);
+    console.error('Error communicating with OpenAI API:', error.message);
     res.status(500).send('Failed to process the request.');
   }
+});
+
+// Add a debug route to check OpenAI version
+app.get('/api/debug/version', (req, res) => {
+  res.json({ openaiVersion: version });
 });
 
 // Start the server
