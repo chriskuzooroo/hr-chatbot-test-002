@@ -2,8 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 
-// Import OpenAI from the local library
-const { Configuration, OpenAIApi } = require('./libs/openai');
+// Import OpenAI package
+const { Configuration, OpenAIApi } = require('openai');
 
 const app = express();
 app.use(cors());
@@ -13,7 +13,7 @@ app.use(express.json());
 let openai;
 try {
   const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY, // Fetch API key from environment variables
+    apiKey: process.env.OPENAI_API_KEY, // Your OpenAI API key from environment variables
   });
 
   openai = new OpenAIApi(configuration);
@@ -36,7 +36,7 @@ app.post('/api/chat', async (req, res) => {
       ],
     });
 
-    // Extract the response
+    // Extract the assistant's response
     const assistantMessage = response.data.choices[0].message.content;
     res.json({ assistantMessage });
   } catch (error) {
