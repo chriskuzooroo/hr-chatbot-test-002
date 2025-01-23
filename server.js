@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 
 // Import the OpenAI library from the local folder
-const { Configuration, OpenAIApi } = require('./libs/openai/package/dist/index');
+const { Configuration, OpenAIApi } = require('./libs/openai'); // Importing from the local package
 
 const app = express();
 app.use(cors());
@@ -29,24 +29,4 @@ app.post('/api/chat', async (req, res) => {
     const { userMessage } = req.body;
 
     const response = await openai.createChatCompletion({
-      model: 'gpt-3.5-turbo',
-      messages: [
-        { role: 'system', content: 'You are a helpful HR assistant.' },
-        { role: 'user', content: userMessage },
-      ],
-    });
-
-    // Extract the assistant's response
-    const assistantMessage = response.data.choices[0].message.content;
-    res.json({ assistantMessage });
-  } catch (error) {
-    console.error('Error communicating with OpenAI API:', error.message);
-    res.status(500).send('Failed to process the request.');
-  }
-});
-
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+      model:
