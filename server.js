@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 
 // Import the OpenAI library from the local folder
-const { Configuration, OpenAIApi } = require('./libs/openai/dist/index'); // Adjusted import path
+const { Configuration, OpenAIApi } = require('./libs/openai/package/dist/index');
 
 const app = express();
 app.use(cors());
